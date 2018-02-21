@@ -4,41 +4,40 @@ using UnityEngine;
 
 public class BeamSource : MonoBehaviour
 {
-    private LineRenderer visual;
+    private LineRenderer line;
+
     void Start() {
-        visual = this.GetComponent<LineRenderer>();
+        line = gameObject.GetComponent<LineRenderer>(); //gets our line renderer
     }
-
     void FixedUpdate() {
-        sendRay(transform.position, transform.forward);
+        sendRay(transform.position, transform.forward); //constantly sends out a new raycast from the starting position
     }
 
-    private void getRayHit(RaycastHit hit, Ray beam) {
-        switch (hit.collider.tag) {
-
-            case "mirror":
-                Debug.Log("hit a mirror");
-                sendRay(hit.transform.position, Vector3.Reflect(beam.direction, hit.normal));
-                break;
-
-        }
-    }
-
-    private void sendRay(Vector3 origin, Vector3 direction) {
+    private void sendRay(Vector3 origin, Vector3 direction) { //shoots out a raycast.  
         Ray beam;
         RaycastHit hit;
         Vector3 endPos = new Vector3(0, 0, 0);
         beam = new Ray(origin, direction);
-        // Debug.DrawRay(origin, direction * 100, Color.green, 100);
-        if (Physics.Raycast(beam, out hit, 50)) {
+        if (Physics.Raycast(beam, out hit, 50)) { //if we hit something
             endPos = hit.point;
-            visual.SetPosition(0, origin);
-            visual.SetPosition(1, endPos);
+            getRayHit(hit, beam); //decide if we hit a mirror or not.
+
         } else {
-            visual.SetPosition(0, origin);
-            visual.SetPosition(1, direction * 20 + origin);
+            // add segment to line that goes from the current origin, into the distance
         }
-        getRayHit(hit, beam);
+    }
+    private void getRayHit(RaycastHit hit, Ray beam) { //checks what we hit
+        switch (hit.collider.tag) {
+            case "mirror":           //if we hit a mirror object
+                Debug.Log("hit a mirror");
+                sendRay(hit.transform.position, Vector3.Reflect(beam.direction, hit.normal)); //send a new ray reflecting off the object we hit.
+                break;
+        }
+    }
+
+    private void renderBeam(Vector3 origin, Vector3 endPos) {
+        // keep track of how many beams we need, somehow? and adjust each segment whenever there is a change in either the origin or what it's reflecting off of.
+        //I can't just render more lines, because I'll be left with a ton of garbage lines leftover.
     }
 
 }
