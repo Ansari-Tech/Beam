@@ -4,40 +4,45 @@ using UnityEngine;
 
 public class BeamSource : MonoBehaviour
 {
-    private LineRenderer line;
-
+    //FOR TESTING
+    [SerializeField]
+    private bool LaserOn;
+    private LineRenderer renderer;
     void Start() {
-        line = gameObject.GetComponent<LineRenderer>(); //gets our line renderer
+        LaserOn = true;
+        renderer = GetComponent<LineRenderer>();
     }
     void FixedUpdate() {
-        sendRay(transform.position, transform.forward); //constantly sends out a new raycast from the starting position
-    }
-
-    private void sendRay(Vector3 origin, Vector3 direction) { //shoots out a raycast.  
-        Ray beam;
-        RaycastHit hit;
-        Vector3 endPos = new Vector3(0, 0, 0);
-        beam = new Ray(origin, direction);
-        if (Physics.Raycast(beam, out hit, 50)) { //if we hit something
-            endPos = hit.point;
-            getRayHit(hit, beam); //decide if we hit a mirror or not.
-
-        } else {
-            // add segment to line that goes from the current origin, into the distance
+        if (LaserOn) {
+            CastRay(transform.position, transform.forward * 100);
         }
     }
-    private void getRayHit(RaycastHit hit, Ray beam) { //checks what we hit
+    private void clearLines() {
+        renderer.positionCount = 0;
+    }
+    private void CastRay(Vector3 origin, Vector3 destination) {
+        Ray beamRay = new Ray(origin, destination);
+        RaycastHit hit;
+
+        if (Physics.Raycast(beamRay, out hit, 100)) {
+            renderer.positionCount += 1;
+            renderer.SetPosition(renderer.positionCount, destination);
+            Debug.DrawLine(origin, hit.point, Color.red);
+            IdentifyCollision(hit, beamRay);
+        }
+    }
+
+    private void IdentifyCollision(RaycastHit hit, Ray beamRay) {
+
         switch (hit.collider.tag) {
-            case "mirror":           //if we hit a mirror object
-                Debug.Log("hit a mirror");
-                sendRay(hit.transform.position, Vector3.Reflect(beam.direction, hit.normal)); //send a new ray reflecting off the object we hit.
+            case "mirror":
+                Debug.Log("hit mirror");
+                CastRay(hit.point, Vector3.Reflect(beamRay.direction, hit.normal));
+                break;
+            default:
+                Debug.Log("hit a wall");
+                clearLines();
                 break;
         }
     }
-
-    private void renderBeam(Vector3 origin, Vector3 endPos) {
-        // keep track of how many beams we need, somehow? and adjust each segment whenever there is a change in either the origin or what it's reflecting off of.
-        //I can't just render more lines, because I'll be left with a ton of garbage lines leftover.
-    }
-
 }
