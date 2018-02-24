@@ -7,10 +7,10 @@ public class BeamSource : MonoBehaviour
     //FOR TESTING
     [SerializeField]
     private bool LaserOn;
-    private LineRenderer renderer;
+    private LineRenderer line;
     void Start() {
         LaserOn = true;
-        renderer = GetComponent<LineRenderer>();
+        line = GetComponent<LineRenderer>();
     }
     void FixedUpdate() {
         if (LaserOn) {
@@ -18,15 +18,14 @@ public class BeamSource : MonoBehaviour
         }
     }
     private void clearLines() {
-        renderer.positionCount = 0;
+        line.positionCount = 0;
     }
     private void CastRay(Vector3 origin, Vector3 destination) {
         Ray beamRay = new Ray(origin, destination);
         RaycastHit hit;
-
         if (Physics.Raycast(beamRay, out hit, 100)) {
-            renderer.positionCount += 1;
-            renderer.SetPosition(renderer.positionCount, destination);
+            line.positionCount += 1;
+            line.SetPosition(line.positionCount -1, destination);
             Debug.DrawLine(origin, hit.point, Color.red);
             IdentifyCollision(hit, beamRay);
         }
