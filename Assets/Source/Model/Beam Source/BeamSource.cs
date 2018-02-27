@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum SurfaceType
-{
-    Mirror,
-    Goal,
-}
-
 public class BeamSource : MonoBehaviour
 {
     private LineRenderer line;
@@ -22,7 +16,7 @@ public class BeamSource : MonoBehaviour
     {
         public Vector3 position, normal;
         public GameObject hitObject;
-        public ILaserSurface surface;
+        public ISurface surface;
         public bool didBounce;
     }
 
@@ -67,7 +61,7 @@ public class BeamSource : MonoBehaviour
 
                 Collider collider = hit.collider;
                 laserHit.hitObject = collider.gameObject;
-                ILaserSurface surface = collider.GetComponent<ILaserSurface>();
+                ISurface surface = collider.GetComponent<ISurface>();
                 laserHit.surface = surface;
 
                 if (surface != null)
@@ -76,10 +70,9 @@ public class BeamSource : MonoBehaviour
                     {
                         case SurfaceType.Mirror:
                             shouldBounce = true;
-                            Debug.Log("Hit a mirror");
                             break;
                         case SurfaceType.Goal:
-                            Debug.Log("hit a goal");
+                        hit.collider.GetComponent<BeamGoal>().GetHit();
                             break;
                     }
                     laserHit.didBounce = true;

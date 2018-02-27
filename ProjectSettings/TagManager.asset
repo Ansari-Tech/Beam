@@ -6,6 +6,8 @@ TagManager:
   tags:
   - mirror
   - beam_goal
+  - Draggable
+  - GameManager
   layers:
   - Default
   - TransparentFX

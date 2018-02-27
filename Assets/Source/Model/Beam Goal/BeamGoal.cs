@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BeamGoal : MonoBehaviour, ILaserSurface
+public class BeamGoal : MonoBehaviour, ISurface
 {
     [SerializeField]
     private bool state;
@@ -22,8 +22,8 @@ public SurfaceType surfaceType {
     {
         return surfaceType;
     }
-    public void GetHit(GameObject rayOrigin)
+    public void GetHit()
     {
-        Debug.Log("Got hit: ");
+        GameManager.manager.endGameState();
     }
 }

@@ -2,7 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ILaserSurface
+public enum SurfaceType
+{
+    Mirror,
+    Goal,
+    Floor,
+}
+public interface ISurface
 {
     SurfaceType surfaceType { get; }
 }
