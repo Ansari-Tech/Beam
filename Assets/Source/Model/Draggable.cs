@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 
 public class Draggable : MonoBehaviour, ISurface
@@ -17,10 +17,10 @@ public class Draggable : MonoBehaviour, ISurface
             floor = false;
             surface = SurfaceType.Mirror;
         }
-        else if(floor)
+        else if (floor)
         {
-          mirror = false;
-          surface = SurfaceType.Floor;
+            mirror = false;
+            surface = SurfaceType.Floor;
         }
 
     }
@@ -30,5 +30,15 @@ public class Draggable : MonoBehaviour, ISurface
         {
             return surface;
         }
+    }
+
+    public void rotateLeft()
+    {
+        gameObject.transform.Rotate(45,0,0);
+    }
+    public void rotateRight()
+    {
+        gameObject.transform.Rotate(-45,0,0);
+
     }
 }
