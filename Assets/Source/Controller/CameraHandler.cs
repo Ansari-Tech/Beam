@@ -8,7 +8,7 @@ public class CameraHandler : MonoBehaviour
     // Use this for initialization
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved && !GetComponent<TouchDrag>().isDragging())
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
