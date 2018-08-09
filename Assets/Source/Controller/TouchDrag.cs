@@ -11,7 +11,8 @@ public class TouchDrag : MonoBehaviour
     private bool dragging = false;
     private Vector3 offset;
     private Transform draggedObject;
-
+    [SerializeField]
+    private float timeToRotate;
     void Update()
     {
         Vector3 v3;
@@ -59,19 +60,33 @@ public class TouchDrag : MonoBehaviour
 
             if (dragging && touch.phase == TouchPhase.Moved && Input.touchCount == 1)
             {
-                v3 = new Vector3(Input.mousePosition.x,  Input.mousePosition.y , dist);
+                v3 = new Vector3(Input.mousePosition.x, Input.mousePosition.y, dist);
                 v3 = Camera.main.ScreenToWorldPoint(v3);
                 Vector3 temp = v3 + offset;
                 Vector3 final = new Vector3(temp.x, -0.62f, temp.z);
                 draggedObject.position = final;
             }
-            if (dragging && (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled))
+
+            else if (dragging && touch.phase == TouchPhase.Stationary && Input.touchCount == 1)
+            {
+                float time = 0.0f;
+                while (time < timeToRotate)
+                {
+                    time += Time.deltaTime;
+                    Debug.Log(time);
+                }
+                Debug.Log("rotate");
+                time = 0.0f;
+                Debug.Log("just tapped");
+                dragging = false;
+            }
+            else if (dragging && (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled))
             {
                 dragging = false;
             }
         }
     }
-        public bool isDragging()
+    public bool isDragging()
     {
         return dragging;
     }

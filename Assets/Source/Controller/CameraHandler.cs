@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CameraHandler : MonoBehaviour
 {
-    public float dragSpeed = 2;
     // Use this for initialization
     void Update()
     {
@@ -12,7 +11,6 @@ public class CameraHandler : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
-
             if (Physics.Raycast(ray, out hit) && hit.transform.GetComponent<Draggable>() == null)
             {
                 Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
