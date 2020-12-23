@@ -14,7 +14,7 @@ public class MouseCameraHandler : MonoBehaviour
     void Start()
     {
         screenEdgeOffset = .05f;
-        cameraSpeed = .2f;
+        cameraSpeed = .055f;
     }
     void Update()
     {
